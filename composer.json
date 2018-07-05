@@ -1,9 +1,9 @@
 {
-    "name": "ssnukala/ufsprinkle-flysystem",
+    "name": "ssnukala/ufsprinkle-filemanager",
     "type": "userfrosting-sprinkle",
-    "description": "The PHP League Flysystem based Sprinkle module for UserFrosting.",
-    "keywords": ["php user management", "usercake", "bootstrap","the phpleague","flysystem"],
-    "homepage": "https://github.com/ssnukala/ufsprinkle-flysystem",
+    "description": "The PHP League Flysystem, Glide and CSV based Sprinkle module for UserFrosting.",
+    "keywords": ["php user management", "usercake", "bootstrap","the phpleague","flysystem","glide","csv"],
+    "homepage": "https://github.com/ssnukala/ufsprinkle-filemanager",
     "license" : "MIT",
     "authors" : [
         {
@@ -14,7 +14,9 @@
     "version": "4.0.0",
     "require": {
         "php": ">=5.6",
-        "league/flysystem":"*"
+        "league/flysystem":"*",
+        "league/glide":"*",
+        "league/csv":"*"
     },
     "autoload": {
         "psr-4": {
@@ -22,6 +24,6 @@
         }
     },
     "extra": {
-        "installer-name": "Flysystem"
+        "installer-name": "FileManager"
     }
 }
