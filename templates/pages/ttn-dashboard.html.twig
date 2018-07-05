@@ -1,0 +1,186 @@
+{% extends "pages/abstract/dashboard.html.twig" %}
+{% block stylesheets_page_group %}
+    <!-- Page-group-specific CSS asset bundle -->
+    {{ assets.css('css/datatables') | raw }}
+
+{% endblock %}
+
+{# Overrides blocks in head of base template #}
+{% block page_title %}{{ translate("DASHBOARD") }}
+{% endblock %}
+{% block page_description %}{% endblock %}
+
+{% block body_matter %}
+    <!-- Info boxes -->
+
+    <div class="container">
+        <div
+            class="ilba_tabs"
+            style='border:1px solid lightgray;border-radius:5px;padding:2px;'>
+            {% set tabactive = ' active ' %}
+            <ul class="nav nav nav-pills ilba-pills" style="border-bottom: none;">
+                <li style="border-bottom: 1px dotted lightgray;" class=' {{tabactive}} '>
+                    <a data-toggle="tab" href="#ttntab-0">Event Current</a>
+                </li>
+                <li style="border-bottom: 1px dotted lightgray;">
+                    <a data-toggle="tab" href="#ttntab-1">Event Daily</a>
+                </li>
+                <li style="border-bottom: 1px dotted lightgray;">
+                    <a data-toggle="tab" href="#ttntab-2">Performer Current</a>
+                </li>
+                <li style="border-bottom: 1px dotted lightgray;">
+                    <a data-toggle="tab" href="#ttntab-3">Performer Daily</a>
+                </li>
+            </ul>
+            <div class="tab-content ">
+                <div id="ttntab-0" class="dsdnasolns tab-pane {{tabactive}} ">
+                    <div class='row'>
+                        <div class='col-md-12 dsdnasolns_datatable'>
+                            <div id="widget-activities" class="box box-primary">
+                                <div class="box-body">
+                                    <div class="filter_links">
+                                        {% set filter_sep = '' %}
+                                        {% for filter_url, filter_name in eventcurrent.options.filters %}
+                                            {{filter_sep}}
+                                            <a
+                                                href="#"
+                                                onclick="reloadDatatableNewURL('{{ eventcurrent.options.htmlid }}', '{{filter_url}}');">
+                                                {{filter_name}}
+                                            </a>
+                                            {% set filter_sep = ' | ' %}
+                                        {% endfor %}
+                                    </div>
+                                    {% include 'components/datatable.html.twig' with {
+                                        'dtoptions' : eventcurrent.options
+                                    } %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% set tabactive = ' ' %}
+                </div>
+                <div id="ttntab-1" class="dsdnasolns tab-pane ">
+
+                    <div class='row'>
+                        <div class='col-md-12 dsdnasolns_datatable'>
+                            <div id="widget-activities" class="box box-primary">
+                                <div class="box-body">
+                                    <div class="filter_links">
+                                        {% set filter_sep = '' %}
+                                        {% for filter_url, filter_name in eventdaily.options.filters %}
+                                            {{filter_sep}}
+                                            <a
+                                                href="#"
+                                                onclick="reloadDatatableNewURL('{{ eventdaily.options.htmlid }}', '{{filter_url}}');">
+                                                {{filter_name}}
+                                            </a>
+                                            {% set filter_sep = ' | ' %}
+                                        {% endfor %}
+                                    </div>
+                                    {% include 'components/datatable.html.twig' with {
+                                        'dtoptions' : eventdaily.options
+                                    } %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ttntab-2" class="dsdnasolns tab-pane {{tabactive}} ">
+                    <div class='row'>
+                        <div class='col-md-12 dsdnasolns_datatable'>
+                            <div id="widget-activities" class="box box-primary">
+                                <div class="box-body">
+                                    <div class="filter_links">
+                                        {% set filter_sep = '' %}
+                                        {% for filter_url, filter_name in performercurrent.options.filters %}
+                                            {{filter_sep}}
+                                            <a
+                                                href="#"
+                                                onclick="reloadDatatableNewURL('{{ performercurrent.options.htmlid }}', '{{filter_url}}');">
+                                                {{filter_name}}
+                                            </a>
+                                            {% set filter_sep = ' | ' %}
+                                        {% endfor %}
+                                    </div>
+                                    {% include 'components/datatable.html.twig' with {
+                                        'dtoptions' : performercurrent.options
+                                    } %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ttntab-3" class="dsdnasolns tab-pane {{tabactive}} ">
+                    <div class='row'>
+                        <div class='col-md-12 dsdnasolns_datatable'>
+                            <div id="widget-activities" class="box box-primary">
+                                <div class="box-body">
+                                    <div class="filter_links">
+                                        {% set filter_sep = '' %}
+                                        {% for filter_url, filter_name in performerdaily.options.filters %}
+                                            {{filter_sep}}
+                                            <a
+                                                href="#"
+                                                onclick="reloadDatatableNewURL('{{ performerdaily.options.htmlid }}', '{{filter_url}}');">
+                                                {{filter_name}}
+                                            </a>
+                                            {% set filter_sep = ' | ' %}
+                                        {% endfor %}
+                                    </div>
+                                    {% include 'components/datatable.html.twig' with {
+                                        'dtoptions' : performerdaily.options
+                                    } %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='column-formatters' style='display:none;'>
+        {% for colformatter in eventdaily.options.formatters %}
+            {% include colformatter %}
+        {% endfor %}
+        {% for colformatter in eventcurrent.options.formatters %}
+            {% include colformatter %}
+        {% endfor %}
+        {% for colformatter in performercurrent.options.formatters %}
+            {% include colformatter %}
+        {% endfor %}
+    </div>
+    <!-- /.row -->
+{% endblock %}
+
+{% block scripts_page %}
+    <!-- Include page variables -->
+    <script type="text/javascript" id="ffsarep_js">
+        {% include "pages/partials/page.js.twig" %}
+
+        // Add user name
+        page = $.extend(true, { // deep extend
+            "group_slug": "{{current_user.group.slug}}"
+        }, page);
+    </script>
+    <!-- CM Template Include datatables JS -->
+    {{ assets.js('js/datatables') | raw }}
+    <!-- CM Template Include dtutilities JS -->
+    {{ assets.js('js/dtutilities') | raw }}
+    {% include 'components/datatable.js.twig' with {
+        'dtoptions' : eventdaily.options,
+        'fields' : eventdaily.fields
+    } %}
+    {% include 'components/datatable.js.twig' with {
+        'dtoptions' : eventcurrent.options,
+        'fields' : eventcurrent.fields
+    } %}
+    {% include 'components/datatable.js.twig' with {
+        'dtoptions' : performercurrent.options,
+        'fields' : performercurrent.fields
+    } %}
+    {% include 'components/datatable.js.twig' with {
+        'dtoptions' : performerdaily.options,
+        'fields' : performerdaily.fields
+    } %}
+
+{% endblock %}

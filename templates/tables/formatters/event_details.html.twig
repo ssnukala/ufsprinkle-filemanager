@@ -1,0 +1,20 @@
+{% import "components/rowfields.html.twig" as rowfields %}
+<div column_formatter='event_name'>
+    <p>
+        <strong>
+            <a target="_blank" href="row.event_url">
+                {{rowfields.rowcolumn('event_name')}}
+            </a>
+        </strong>({{rowfields.rowcolumn('parent_category')}})
+        <strong>{{rowfields.rowcolumn('venue_name')}}</strong>,
+        {{rowfields.rowcolumn('venue_city')}},
+        {{rowfields.rowcolumn('venue_state_province_long')}}
+        ({{rowfields.rowcolumn('count_last_30_days')}}
+        |
+        {{rowfields.rowcolumn('count_last_60_days')}}
+        |
+        {{rowfields.rowcolumn('count_last_90_days')}}
+        |
+        {{rowfields.rowcolumn('count_last_365_days')}})
+    </p>
+</div>

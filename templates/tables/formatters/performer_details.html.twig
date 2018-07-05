@@ -1,0 +1,17 @@
+{% import "components/rowfields.html.twig" as rowfields %}
+<div column_formatter='performer_name'>
+    <p>
+        <strong>
+            <a target="_blank" href="row.performer_url">
+                {{rowfields.rowcolumn('performer_name')}}
+            </a>
+        </strong>({{rowfields.rowcolumn('count | count_last_30_days')}})<br>
+        {{rowfields.rowcolumn('count_last_30_days')}}
+        |
+        {{rowfields.rowcolumn('count_last_60_days')}}
+        |
+        {{rowfields.rowcolumn('count_last_90_days')}}
+        |
+        {{rowfields.rowcolumn('count_last_365_days')}}
+    </p>
+</div>

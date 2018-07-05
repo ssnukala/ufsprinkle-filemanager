@@ -1,0 +1,27 @@
+{
+    "name": "ssnukala/ufsprinkle-flysystem",
+    "type": "userfrosting-sprinkle",
+    "description": "The PHP League Flysystem based Sprinkle module for UserFrosting.",
+    "keywords": ["php user management", "usercake", "bootstrap","the phpleague","flysystem"],
+    "homepage": "https://github.com/ssnukala/ufsprinkle-flysystem",
+    "license" : "MIT",
+    "authors" : [
+        {
+            "name": "Srinivas Nukala",
+            "homepage": "http://srinivasnukala.com"
+        }
+    ],
+    "version": "4.0.0",
+    "require": {
+        "php": ">=5.6",
+        "league/flysystem":"*"
+    },
+    "autoload": {
+        "psr-4": {
+            "UserFrosting\\Sprinkle\\Flysystem\\": "src/"
+        }
+    },
+    "extra": {
+        "installer-name": "Flysystem"
+    }
+}
