@@ -5,7 +5,7 @@
  * @link      https://github.com/ssnukala/ufsprinkle-dsd
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
-namespace UserFrosting\Sprinkle\TTNCampaigns\ServicesProvider;
+namespace UserFrosting\Sprinkle\FileManager\ServicesProvider;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

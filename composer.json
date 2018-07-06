@@ -16,11 +16,13 @@
         "php": ">=5.6",
         "league/flysystem":"*",
         "league/glide":"*",
-        "league/csv":"*"
+        "league/csv":"*",
+        "league/flysystem-sftp":"*",
+        "league/flysystem-ziparchive":"*"
     },
     "autoload": {
         "psr-4": {
-            "UserFrosting\\Sprinkle\\Flysystem\\": "src/"
+            "UserFrosting\\Sprinkle\\FileManager\\": "src/"
         }
     },
     "extra": {

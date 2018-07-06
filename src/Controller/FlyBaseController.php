@@ -24,37 +24,17 @@ use UserFrosting\Support\Repository\Loader\YamlFileLoader;
 use UserFrosting\Fortress\RequestSchema\RequestSchemaRepository;
 use UserFrosting\Sprinkle\FileManager\Controller\FlySystemResponse;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local as Adapter;
 use League\Glide\ServerFactory;
 
-class FileManagerLocalController extends SimpleController
+class FlyBaseController extends SimpleController
 {
     protected $basepath;
     protected $flysystem;
-    protected $glide;
-    protected $csv;
+    protected $options;
 
-    public function __construct(ContainerInterface $ci, $subdir = '')
+    public function setFileSystem()
     {
-        $this->setFileSystem($subdir);
-        return parent::__construct($ci);
-    }
-
-    public function setFileSystem($subdir = '')
-    {
-        $config = $ci->config;
-        $this->basepath = rtrim(str_replace('/public', '', $config['path.document_root']) . "/docs/$subdir", "/");
-        $adapter = new Adapter($this->basepath, LOCK_EX, Adapter::DISALLOW_LINKS, [
-            'file' => [
-                'public' => 0744,
-                'private' => 0700,
-            ],
-            'dir' => [
-                'public' => 0755,
-                'private' => 0700,
-            ]
-        ]);
-        $this->flysystem = new Filesystem($adapter);
+        return false;
     }
 
     public function getFileSystem()
@@ -84,10 +64,13 @@ class FileManagerLocalController extends SimpleController
 
     public function readFile($file)
     {
-        if ($this->flysystem->has($file)) {
+        $hasfile =$this->flysystem->has($file);
+        Debug::debug("Line 68 hasfile is ".$hasfile);
+        if ($hasfile) {
             $contents = $this->flysystem->read($file);
             return $contents;
         } else {
+            Debug::debug("Line 71 read file ($file) does not exist returning false");
             return false;
         }
     }
@@ -101,14 +84,14 @@ class FileManagerLocalController extends SimpleController
                 $response = $this->flysystem->rename($file, $file.time());
             }
         }
-        $response = $filesystem->write($file, $contents);
+        $response = $this->flysystem->write($file, $contents);
         return  $response;
     }
 
     public function getFileMime($file)
     {
-        $var_fmime = $this->flysystem->getMimetype($file);
-        return $var_fmime;
+        $filemime = $this->flysystem->getMimetype($file);
+        return $filemime;
     }
 
     public function saveUploadedFiles($fileindex='')

@@ -25,37 +25,20 @@ use UserFrosting\Sprinkle\Core\Facades\Debug;
 use UserFrosting\Sprinkle\FormGenerator\Form;
 use UserFrosting\Support\Repository\Loader\YamlFileLoader;
 use UserFrosting\Fortress\RequestSchema\RequestSchemaRepository;
-use UserFrosting\Sprinkle\FileManager\Controller\FileManagerFTPController;
+use UserFrosting\Sprinkle\FileManager\Controller\FlySFTPController as SFTPController;
 
 class FileManagerController extends SimpleController
 {
-    public function fileTest($request, $response, $args)
+    public function ttnTest($request, $response, $args)
     {
-        $limit=5;
+        $options = [
+        'host' => 'feeds.ticketnetwork.com',
+        'username' => 'PF-4618',
+        'password' => '$$4618ka$$'];
 
-        $ttndata = new TTNPerformerDataController($this->ci, 'http://www.boxofficeticketsnow.com');
-        $topperfrec = $ttndata->prepareData($limit);
-        Debug::debug("Line 244 this is the TopPerf array", $topperfrec);
-        var_dump($topperfrec);
-//        $ttndata2 = new TTNVenueDataController($this->ci, 'https://goodseatticktes.com');
-/*
-        $topperf_today = PerformerDailyStats::topToday()->limit($limit)->get();
-        $toprecs= $topperf_today->toArray();
-        foreach ($toprecs as &$toprec) {
-//            $toprec = $this->getTTNAdData($toprec, 'performer_name');
-            $toprec = $ttndata->prepareData($toprec);
-        }
-        $topvenue_today = VenueDailyStats::topToday()->limit($limit)->get();
-        $toprecs2= $topvenue_today->toArray();
-        foreach ($toprecs2 as &$toprec2) {
-//            $toprec = $this->getTTNAdData($toprec, 'performer_name');
-            $toprec2 = $ttndata2->prepareData($toprec2);
-        }
-        Debug::debug("Line 242 this is the toprecs array", $toprecs2);
-*/
-//        $cleanname = 'nhl stanley cup finals washington capitals vs vegas golden knights home game 3 series game 6';
-//        $updstring = $this->createCleanKeywords($cleanname);
-//        $updstring = AdUtil::createCleanKeywords($cleanname);
-//        echo($updstring);
+        $ttnftp = new SFTPController($this->ci, $options);
+        $files = $ttnftp->getFileList('/');
+        Debug::debug("Line 41 the file liset is  array", $files);
+        var_dump($files);
     }
 }
