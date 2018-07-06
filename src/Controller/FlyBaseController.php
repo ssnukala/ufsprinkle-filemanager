@@ -94,6 +94,22 @@ class FlyBaseController extends SimpleController
         return $filemime;
     }
 
+    public function has($file)
+    {
+        $hasfile = $this->flysystem->has($file);
+        return $hasfile;
+    }
+
+    public function getTimeStamp($file)
+    {
+        $filestamp= false;
+        if ($this->flysystem->has($file)) {
+            $filestamp = $this->flysystem->getTimestamp($file);
+        }
+        return $filestamp;
+    }
+
+
     public function saveUploadedFiles($fileindex='')
     {
         $filelist=[];

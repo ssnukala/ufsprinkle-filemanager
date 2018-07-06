@@ -16,7 +16,7 @@
         "php": ">=5.6",
         "league/flysystem":"*",
         "league/glide":"*",
-        "league/csv":"*",
+        "league/csv":">9.0",
         "league/flysystem-sftp":"*",
         "league/flysystem-ziparchive":"*"
     },
