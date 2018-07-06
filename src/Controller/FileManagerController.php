@@ -1,14 +1,14 @@
 <?php
 
 /**
- * GoogleAdWords controller :
+ * FileManager controller :
  *
- * @link      https://github.com/ssnukala/ufsprinkle-googleadwords
+ * @link      https://github.com/ssnukala/ufsprinkle-filemanager
  * @copyright Copyright (c) 2013-2016 Srinivas Nukala
  *
  */
 
-namespace UserFrosting\Sprinkle\TTNCampaigns\Controller;
+namespace UserFrosting\Sprinkle\FileManager\Controller;
 
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -25,122 +25,12 @@ use UserFrosting\Sprinkle\Core\Facades\Debug;
 use UserFrosting\Sprinkle\FormGenerator\Form;
 use UserFrosting\Support\Repository\Loader\YamlFileLoader;
 use UserFrosting\Fortress\RequestSchema\RequestSchemaRepository;
-use UserFrosting\Sprinkle\TTNCampaigns\Database\Models\EventCurrentStats;
-use UserFrosting\Sprinkle\TTNCampaigns\Database\Models\EventDailyStats;
-use UserFrosting\Sprinkle\TTNCampaigns\Database\Models\PerformerCurrentStats;
-use UserFrosting\Sprinkle\TTNCampaigns\Database\Models\PerformerDailyStats;
-use UserFrosting\Sprinkle\TTNCampaigns\Database\Models\VenueCurrentStats;
-use UserFrosting\Sprinkle\TTNCampaigns\Database\Models\VenueDailyStats;
-use UserFrosting\Sprinkle\TTNCampaigns\Controller\Datatables\EventCurrentStatsController;
-use UserFrosting\Sprinkle\TTNCampaigns\Controller\Datatables\EventDailyStatsController;
-use UserFrosting\Sprinkle\TTNCampaigns\Controller\Datatables\PerformerCurrentStatsController;
-use UserFrosting\Sprinkle\TTNCampaigns\Controller\Datatables\PerformerDailyStatsController;
-use UserFrosting\Sprinkle\GoogleAdWords\Controller\GoogleAdWordsController;
-use UserFrosting\Sprinkle\GoogleAdWords\Controller\GoogleAdWordsUtilController as AdUtil;
-use UserFrosting\Sprinkle\TTNCampaigns\Controller\Data\TTNCampaignDataStaticController as TTNData;
-use UserFrosting\Sprinkle\TTNCampaigns\Controller\Data\TTNPerformerDataController;
-use UserFrosting\Sprinkle\TTNCampaigns\Controller\Data\TTNVenueDataController;
+use UserFrosting\Sprinkle\FileManager\Controller\FileManagerFTPController;
 
-/*
-use UserFrosting\Sprinkle\GoogleAdWords\Controller\Adwords\BasicOperations\GetCampaigns;
-use UserFrosting\Sprinkle\GoogleAdWords\Controller\Adwords\BasicOperations\AddCampaigns;
-use UserFrosting\Sprinkle\GoogleAdWords\Controller\Adwords\BasicOperations\AddAdGroups;
-use UserFrosting\Sprinkle\GoogleAdWords\Controller\Adwords\BasicOperations\AddKeywords;
-use UserFrosting\Sprinkle\GoogleAdWords\Controller\Adwords\BasicOperations\AddExpandedTextAds;
-*/
-class TTNCampaignsController extends SimpleController
+class FileManagerController extends SimpleController
 {
-    protected $siteurl = 'https://www.goodseattickets.com';
-
-    public function pageDashboard($request, $response, $args)
+    public function fileTest($request, $response, $args)
     {
-        $repcontroller = new EventCurrentStatsController($this->ci);
-        $repcontroller->setupDatatable();
-        $eventcurrent = $repcontroller->getDatatableArray();
-
-        $repcontroller2 = new EventDailyStatsController($this->ci);
-        $repcontroller2->setupDatatable();
-        $eventdaily = $repcontroller2->getDatatableArray();
-
-        $repcontroller3 = new PerformerCurrentStatsController($this->ci);
-        $repcontroller3->setupDatatable();
-        $performercurrent = $repcontroller3->getDatatableArray();
-
-        $repcontroller4 = new PerformerDailyStatsController($this->ci);
-        $repcontroller4->setupDatatable();
-        $performerdaily = $repcontroller4->getDatatableArray();
-
-        //        $this->addCampaigns($request, $response, $args);
-
-        return $this->ci->view->render($response, "pages/ttn-dashboard.html.twig", [
-                    'info' => [
-                        'environment' => $this->ci->environment,
-                        'path' => [
-                            'project' => \UserFrosting\ROOT_DIR
-                        ]
-                    ],
-                    "eventcurrent" => $eventcurrent,
-                    "eventdaily" => $eventdaily,
-                    "performercurrent" => $performercurrent,
-                    "performerdaily" => $performerdaily
-        ]);
-    }
-
-    public function createDailyTTNCampaigns($request, $response, $args)
-    {
-        /*
-        Ad
-        Headline1: 75% Off {Performer/Event} Tickets
-        Headline2: Cheapest Tickets, Fast & Easy
-        Description: Trusted Source for {performer/event} Tickets. 100% Buyer Guarantee.
-        Keywords:
-            performer tickets
-            [performer tickets]
-            +performer +tickets
-         */
-        Debug::debug("Line 123 calling performer daily stats now");
-        $this->createPerformerDailyStatsCampaigns(10);
-        Debug::debug("Line 125: Done \n. calling Event daily stats now");
-//        $this->createEventDailyStatsCampaigns(5);
-//        Debug::debug("Line 127: Done with all");
-        echo("<h3>All Done</h3>");
-    }
-
-    public function createEventDailyStatsCampaigns($limit=5)
-    {
-        $adController = new GoogleAdWordsController($this->ci);
-        $topevents_today = EventDailyStats::topToday()->limit($limit)->get();
-        $toprecs= $topevents_today->toArray();
-
-        foreach ($toprecs as &$toprec) {
-            $toprec = $this->prepareData($toprec, 'event_name');
-//            $this->addGoogleCampaigns($toprec['adwords_input']);
-            Debug::debug("Line 118 Adding campaigns with this ", $toprecs['adwords_input']);
-            $adController->addMyCampaigns($toprec['adwords_input']);
-        }
-        Debug::debug("Line 162 this is the toprecs array", $toprecs);
-    }
-
-    public function createPerformerDailyStatsCampaigns($limit=5)
-    {
-        $adController = new GoogleAdWordsController($this->ci);
-        $ttndata = new TTNPerformerDataController($this->ci, 'http://www.boxofficeticketsnow.com');
-        $topperfrec = $ttndata->prepareData($limit);
-//        Debug::debug("Line 128 Creating campaigns with this TopPerf array", $topperfrec);
-        foreach ($topperfrec as $toprec) {
-            $adController->addMyCampaigns($toprec['adwords_input']);
-        }
-        Debug::debug("Line 132 Done processing Campaigns");
-    }
-
-
-    public function ttnTest($request, $response, $args)
-    {
-        /*        $loader = new YamlFileLoader("schema://campaigns/test_campaign.json");
-                $schemaData = $loader->load();
-                Debug::debug("Line 273 loaded data is ", $schemaData);
-                echo("Line 274 the budget is : ".$schemaData['budget']['microamount']);
-        */
         $limit=5;
 
         $ttndata = new TTNPerformerDataController($this->ci, 'http://www.boxofficeticketsnow.com');
