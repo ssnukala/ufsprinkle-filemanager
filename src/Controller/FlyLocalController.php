@@ -33,9 +33,10 @@ class FlyLocalController extends FlyBaseController
     public function __construct($ci, $subdir = '')
     {
         $config = $ci->config;
-        Debug::debug("Line 36 path config is ", $config['path']);
+        Debug::debug("Line 36 path RootDir is ".\UserFrosting\ROOT_DIR);
+
 //        $docroot = str_replace('/public', '', $config['path.document_root']);
-        $this->basepath = rtrim(str_replace('/public', '', $config['path.document_root']) . "/docs/$subdir", "/");
+        $this->basepath = rtrim(\UserFrosting\ROOT_DIR . "/docs/$subdir", "/");
 //        Debug::debug("Line 43 the base path is ".$this->basepath);
         $this->setFileSystem();
         return parent::__construct($ci);
