@@ -1,14 +1,17 @@
 <?php
+
 /**
  * UserFrosting (http://www.userfrosting.com)
  *
  * @link      https://github.com/ssnukala/ufsprinkle-dsd
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
+
 namespace UserFrosting\Sprinkle\FileManager\ServicesProvider;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Container\ContainerInterface;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager;
 use UserFrosting\Sprinkle\Core\Facades\Debug;
@@ -25,7 +28,7 @@ class ServicesProvider
      *
      * @param Container $container A DI container implementing ArrayAccess and container-interop.
      */
-    public function register($container)
+    public function register(ContainerInterface $container)
     {
 
         /**
